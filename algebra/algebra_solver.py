@@ -1,4 +1,5 @@
 import sympy as sp
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 
 
 def solve_algebraic_expression(expression):
@@ -12,6 +13,16 @@ def solve_algebraic_expression(expression):
 
     return decimal_solutions
 
+def validate_expression(expression):
+    try:
+        transformations = (standard_transformations +
+                           (implicit_multiplication_application,))
+        parse_expr(expression, transformations=transformations)
+        return True
+    except Exception as e:
+        print("Invalid expression. Please enter a valid algebraic expression.")
+        return False
+
 
 def main():
     print("Simple Algebraic Expression Solver Bot")
@@ -22,6 +33,9 @@ def main():
         if expression.lower() == 'exit':
             print("Exiting the bot. Goodbye!")
             break
+
+        if not validate_expression(expression):
+            continue
 
         try:
             solutions = solve_algebraic_expression(expression)

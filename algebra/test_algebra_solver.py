@@ -1,5 +1,5 @@
 import unittest
-from algebra import solve_algebraic_expression
+from algebra_solver import solve_algebraic_expression
 
 
 class TestAlgebraSolver(unittest.TestCase):
