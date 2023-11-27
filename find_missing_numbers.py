@@ -10,7 +10,7 @@ leaderboard_file = "leaderboard.csv"
 def load_leaderboard():
     if os.path.isfile(leaderboard_file):
         leaderboard = pd.read_csv(leaderboard_file)
-    elif(FileNotFoundError):
+    elif (FileNotFoundError):
         leaderboard = pd.DataFrame(columns=["Username", "Time"])
     return leaderboard
 
@@ -26,7 +26,7 @@ def difficulty_level():
                 array_length = 10 * difficulty
                 num_arr = random.sample(range(0, array_length), array_length)
                 random_num_arr = random.sample(num_arr, random.randint(1, 9))
-                # random_num_arr = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                # random_num_arr = [0, 1, 2, 3, 4, 5, 6, 7,]
                 return num_arr, random_num_arr, difficulty
         except ValueError:
             print("Invalid input. Please enter a valid integer.")
@@ -39,11 +39,12 @@ def add_missing_num():
     print(difficulty)
     
     # Time penalty for entering a duplicate number
-    penalty_time = 0.0 
+    penalty_time = 0.0
+    
+    # Start the timer when missing numbers input shows up on screen
+    start_time = time.time()  
 
     while len(random_num_arr) < len(num_arr):
-        # Start the timer when missing numbers input shows up on screen
-        start_time = time.time()  
         while True:
             try:
                 print(random_num_arr)
@@ -56,9 +57,10 @@ def add_missing_num():
 
         for missing_num in missing_nums:
             if missing_num in random_num_arr:
-                print(f"Number {missing_num} already in array. Time penalty of {penalty_time} seconds added.")
                 penalty_time += 2.0
-                
+                print(f"Number {missing_num} already in array. Time penalty of {penalty_time} seconds added.")
+            elif missing_num not in num_arr:
+                print(f"Number {missing_num} not in array. Try again.")
             else:
                 random_num_arr.append(missing_num)
 
@@ -71,8 +73,15 @@ def add_missing_num():
     print(f"You completed the array in {elapsed_time} seconds!")
     print("You have successfully added the missing number(s) to the array:", random_num_arr)
 
-    username = input("Enter your username: ")
-    # print(leaderboard)
+    while True:
+        try:
+            username = input("Enter your username: ")
+            if not username:
+                raise ValueError("Username cannot be empty.")
+            break
+        except ValueError as ve:
+            print(f"Error: {ve}")
+            
     new_leaderboard = pd.DataFrame({"Username": username, "Time": elapsed_time}, index=[0])
     new_leaderboard.to_csv(leaderboard_file, mode='a', header=False, index=False)
 
