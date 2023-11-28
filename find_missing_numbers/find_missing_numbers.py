@@ -4,16 +4,36 @@ import time
 import pandas as pd
 import os
 
-leaderboard_file = "leaderboard.csv"
+# Get the directory of the script
+script_directory = os.path.dirname(os.path.realpath(__file__))
 
+# Construct the path to the leaderboard.csv file
+leaderboard_file = os.path.join(script_directory, "leaderboard.csv")
+
+
+leaderboard_file = "find_missing_numbers/leaderboard.csv"
 
 def load_leaderboard():
     if os.path.isfile(leaderboard_file):
         leaderboard = pd.read_csv(leaderboard_file)
     elif (FileNotFoundError):
-        leaderboard = pd.DataFrame(columns=["Username", "Time"])
+        leaderboard = pd.DataFrame(columns=["Username", "Difficulty", "Time", "Numbers_Missing", "Numbers_Array"])
     return leaderboard
 
+
+def display_leaderboard(leaderboard, username):
+    # Sort the leaderboard by Difficulty and Time
+    sorted_leaderboard = leaderboard.sort_values(by=["Difficulty", "Time"])
+
+    # Display only the top 10 entries
+    top_10_leaderboard = sorted_leaderboard.head(10)
+    print("\nTop 10 Leaderboard:")
+    print(top_10_leaderboard)
+
+    # Show the current user's position
+    sorted_leaderboard.to_csv(leaderboard_file, index=False) 
+    user_position = sorted_leaderboard[sorted_leaderboard['Username'] == username].index.item() + 1
+    # print(f"\nYour Position, {username}: #{user_position}")
 
 def difficulty_level():
     while True:
@@ -25,7 +45,7 @@ def difficulty_level():
             else:
                 array_length = 10 * difficulty
                 num_arr = random.sample(range(0, array_length), array_length)
-                random_num_arr = random.sample(num_arr, random.randint(1, 9))
+                random_num_arr = random.sample(num_arr, random.randint(1, len(num_arr) - 1))
                 # random_num_arr = [0, 1, 2, 3, 4, 5, 6, 7,]
                 return num_arr, random_num_arr, difficulty
         except ValueError:
@@ -36,7 +56,10 @@ def difficulty_level():
 def add_missing_num():
     num_arr, random_num_arr, difficulty = difficulty_level()
 
-    print(difficulty)
+    numbers_missing_len = len(num_arr) - len(random_num_arr)
+    numbers_array_len = len(num_arr)
+    # Ensure leaderboard is loaded, but no need to save it separately
+    leaderboard = load_leaderboard() 
     
     # Time penalty for entering a duplicate number
     penalty_time = 0.0
@@ -65,7 +88,7 @@ def add_missing_num():
                 random_num_arr.append(missing_num)
 
         # Sort the array after each addition
-        random_num_arr.sort()  
+        # random_num_arr.sort()  
 
     end_time = time.time()
     elapsed_time = round(end_time - start_time + penalty_time, 2)
@@ -78,23 +101,22 @@ def add_missing_num():
             username = input("Enter your username: ")
             if not username:
                 raise ValueError("Username cannot be empty.")
+            elif username in leaderboard['Username'].values:
+                raise ValueError("Username already exists. Please enter a different username.")
             break
         except ValueError as ve:
             print(f"Error: {ve}")
             
-    new_leaderboard = pd.DataFrame({"Username": username, "Time": elapsed_time}, index=[0])
+    new_leaderboard = pd.DataFrame({"Username": username, "Difficulty": difficulty, "Time": elapsed_time, "Numbers_Missing": numbers_missing_len, "Numbers_Array": numbers_array_len }, index=[0])
     new_leaderboard.to_csv(leaderboard_file, mode='a', header=False, index=False)
 
     leaderboard = load_leaderboard()
-    sorted_leaderboard = leaderboard.sort_values(by=["Time"])
-    
-    print("\nLeaderboard:")
-    print(sorted_leaderboard)
+    display_leaderboard(leaderboard, username)
 
 
 def main():
     print("Input missing number from array")
-    load_leaderboard()  # Ensure leaderboard is loaded, but no need to save it separately
+    
     add_missing_num()
 
 
