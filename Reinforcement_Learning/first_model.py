@@ -27,9 +27,9 @@ env = gym.make(environment_name)
 
 log_path = os.path.join('Reinforcement_Learning/Training', 'Logs')
 
-print(log_path)
 
 env = DummyVecEnv([lambda: gym.make(environment_name)])
 model = PPO('MlpPolicy', env, verbose=1, tensorboard_log=log_path)
 
 model.learn(total_timesteps=20000)
+model.save('Reinforcement_Learning/Training/Saved_Models/PPO_CartPole')
