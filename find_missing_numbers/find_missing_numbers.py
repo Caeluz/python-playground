@@ -17,7 +17,7 @@ def load_leaderboard():
     if os.path.isfile(leaderboard_file):
         leaderboard = pd.read_csv(leaderboard_file)
     elif (FileNotFoundError):
-        leaderboard = pd.DataFrame(columns=["Username", "Difficulty", "Time", "Numbers_Missing", "Numbers_Array"])
+        leaderboard = pd.DataFrame(columns=["Username", "Difficulty", "Time", "Numbers_Missing", "Numbers_Array", "Mistake_Count"])
     return leaderboard
 
 
@@ -64,6 +64,9 @@ def add_missing_num():
     # Time penalty for entering a duplicate number
     penalty_time = 0.0
     
+    # Penalty time for each mistake (entering a duplicate number)
+    mistake_count = 0
+    
     # Start the timer when missing numbers input shows up on screen
     start_time = time.time()  
 
@@ -81,6 +84,7 @@ def add_missing_num():
         for missing_num in missing_nums:
             if missing_num in random_num_arr:
                 penalty_time += 2.0
+                mistake_count += 1
                 print(f"Number {missing_num} already in array. Time penalty of {penalty_time} seconds added.")
             elif missing_num not in num_arr:
                 print(f"Number {missing_num} not in array. Try again.")
@@ -107,7 +111,7 @@ def add_missing_num():
         except ValueError as ve:
             print(f"Error: {ve}")
             
-    new_leaderboard = pd.DataFrame({"Username": username, "Difficulty": difficulty, "Time": elapsed_time, "Numbers_Missing": numbers_missing_len, "Numbers_Array": numbers_array_len }, index=[0])
+    new_leaderboard = pd.DataFrame({"Username": username, "Difficulty": difficulty, "Time": elapsed_time, "Numbers_Missing": numbers_missing_len, "Numbers_Array": numbers_array_len, "Mistake_count": mistake_count }, index=[0])
     new_leaderboard.to_csv(leaderboard_file, mode='a', header=False, index=False)
 
     leaderboard = load_leaderboard()
@@ -115,9 +119,14 @@ def add_missing_num():
 
 
 def main():
-    print("Input missing number from array")
-    
-    add_missing_num()
+    while True:
+        print("Input missing number from array")
+        add_missing_num()
+        
+        play_again = input("Do you want to play again? (1/0): ")
+        if play_again != '1':
+            print("Goodbye!")
+            break
 
 
 if __name__ == "__main__":

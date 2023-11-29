@@ -19,7 +19,7 @@ le = LabelEncoder()
 data['Username'] = le.fit_transform(data['Username'])
 
 # Split data into features and target variable
-X = data[['Username', 'Difficulty', 'Numbers_Missing', 'Numbers_Array']]
+X = data[['Username', 'Difficulty', 'Numbers_Missing', 'Numbers_Array', 'Mistake_Count']]
 y = data['Time']
 
 # Split data into training and testing sets
@@ -41,12 +41,14 @@ model_file = os.path.join(script_directory, "leaderboard_predicting_time.csv")
 
 # Now, you can use the trained model to predict for individuals with missing values
 missing_data = pd.read_csv(model_file)
+# missing_data = missing_data.drop(columns=['Time'])
+# missing_data.to_csv(missing_data, index=False)
 
 # Encode 'Username' in the missing data using the same LabelEncoder
 missing_data['Username'] = le.transform(missing_data['Username'])
 
 # Select the columns used for prediction
-prediction_columns = ['Username', 'Difficulty', 'Numbers_Missing', 'Numbers_Array']
+prediction_columns = ['Username', 'Difficulty', 'Numbers_Missing', 'Numbers_Array', 'Mistake_Count']
 
 # Use the trained model to predict the 'Time' values for the missing data
 predictions = model.predict(missing_data[prediction_columns])

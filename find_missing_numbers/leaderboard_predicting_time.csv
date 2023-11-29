@@ -1,6 +1,10 @@
-Username,Difficulty,Numbers_Missing,Numbers_Array
-test,1,6,10
-test1,1,1,10
-test2,1,2,10
-test3,1,6,10
-test4,1,1,10
+Username,Difficulty,Numbers_Missing,Numbers_Array,Mistake_Count
+tester7,1,1,10,0
+tester5,1,1,10,0
+tester6,1,3,10,0
+tester2,1,3,10,0
+tester,1,9,10,0
+tester9,1,4,10,0
+tester8,1,4,10,0
+tester4,1,6,10,0
+tester3,1,3,10,1
