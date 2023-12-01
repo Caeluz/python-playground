@@ -25,6 +25,7 @@ class ShowerEnv(Env):
     def __init__(self):
         # Actions we can take, down, stay, up for the temperature
         self.action_space = Discrete(3)
+        # Box(0, 100, shape=(1,), dtype=np.float32)
         self.observation_space = Box(low=np.array([0]), high=np.array([100]))
         self.state = 38 + random.randint(-3,3)
         self.shower_length = 60
