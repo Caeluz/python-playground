@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
 driver = webdriver.Chrome()
@@ -196,15 +198,27 @@ time.sleep(1)
 contact_number_input_element.send_keys("01234567890")
 
 # Function to fill out form fields
-def fill_out_form(driver, label_text, input_value):
+def fill_out_form(driver, label_text, input_value, time_sleep=1):
     label_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
     for_attribute_value = label_element.get_attribute("for")
     input_element = driver.find_element(By.ID, for_attribute_value)
 
     input_element.click()
-    time.sleep(1)
+    time.sleep(time_sleep)
     input_element.send_keys(input_value)
 
+def fill_out_form_read_only(driver, label_text, input_value, time_sleep=1):
+    label_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
+    for_attribute_value = label_element.get_attribute("for")
+    input_element = driver.find_element(By.ID, for_attribute_value)
+
+    input_element.click()
+    time.sleep(time_sleep)
+    
+    dropdown_option = driver.find_element(By.XPATH, f"//div[text()='{input_value}']")
+    dropdown_option.click()
+    
+    
 
 
 
@@ -215,16 +229,52 @@ fill_out_form(driver, "Nationality", "American")
 fill_out_form(driver, "TIN", "123-456-789")
 fill_out_form(driver, "Passport Number", "AB123456")
 
-# Function to click the button containing a span
-# def click_button_with_span(driver, button_text):
+driver.execute_script("window.scrollTo(0, 0);")
+address_label = driver.find_element(By.XPATH, "//span[@class='v-stepper__step__step' and contains(text(), '3')]")
+address_label.click()
+time.sleep(1)
 
 
-# # Example usage for the "Proceed" button
-# click_button_with_span(driver, "Proceed")
+# Address
+fill_out_form(driver, "Unit/Building/House No./Purok/Street/Subdivision", "569-A Purok 1, Barangay San Jose", 2)
+fill_out_form_read_only(driver, "Country", "PHILIPPINES", 2)
+fill_out_form_read_only(driver, "Region", "REGION III (CENTRAL LUZON)", 2)
+fill_out_form_read_only(driver, "Province", "PAMPANGA", 2)
+fill_out_form_read_only(driver, "Municipality", "MABALACAT CITY", 2)
+fill_out_form_read_only(driver, "Barangay", "DAU", 2)
 
-button_text = "Proceed"
-button_element = driver.find_element(By.XPATH, f"//button[contains(span, '{button_text}')]")
-button_element.click()
+driver.execute_script("window.scrollTo(0, 0);")
+address_label = driver.find_element(By.XPATH, "//span[@class='v-stepper__step__step' and contains(text(), '4')]")
+address_label.click()
+time.sleep(1)
+
+# Emergency Contact
+# fill_out_form(driver, "Contact Person's Name", "Jane Doe")
+
+
+# label_element = driver.find_element(By.CLASS_NAME, "v-input__control")
+
+# label_element.click()
+# time.sleep(1)
+# label_element.send_keys('Jane Doe')
+
+label_element = driver.find_element(By.XPATH, f"//label[text()='Contact Person's Name']")
+for_attribute_value = label_element.get_attribute("for")
+input_element = driver.find_element(By.ID, for_attribute_value)
+
+input_element.click()
+time.sleep(1)
+input_element.send_keys("Jane Doe")
+
+# fill_out_form(driver, "Contact Person\'s Name", "Jane Doe")
+fill_out_form(driver, "Contact Person's Number", "09876543210")
+
+driver.execute_script("window.scrollTo(0, 0);")
+address_label = driver.find_element(By.XPATH, "//span[@class='v-stepper__step__step' and contains(text(), '5')]")
+address_label.click()
+
+proceed_button = driver.find_element(By.XPATH, "//span[text()='Submit']")
+proceed_button.click()
 
 time.sleep(3)
 
