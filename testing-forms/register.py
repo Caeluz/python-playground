@@ -21,7 +21,7 @@ time.sleep(2)
 navdrawer = driver.find_element(By.CLASS_NAME, "v-btn__content")
 navdrawer.click()
 
-time.sleep(3)
+time.sleep(1)
 
 citizens_div = driver.find_element(By.XPATH, "//div[text()='Citizens']")
 citizens_div.click()
@@ -44,7 +44,7 @@ time.sleep(1)
 
 category_option = driver.find_element(By.XPATH, "//div[text()='ALL ADULT POPULATION ELIGIBLE TO BE CATEGORIZES AS PRIORITY GROUP A1']")
 category_option.click()
-time.sleep(2)
+time.sleep(1)
 
 # identification_card_input = driver.find_element(By.XPATH, "//input[label='Identification Card']")
 
@@ -236,12 +236,12 @@ time.sleep(1)
 
 
 # Address
-fill_out_form(driver, "Unit/Building/House No./Purok/Street/Subdivision", "569-A Purok 1, Barangay San Jose", 2)
-fill_out_form_read_only(driver, "Country", "PHILIPPINES", 2)
-fill_out_form_read_only(driver, "Region", "REGION III (CENTRAL LUZON)", 2)
-fill_out_form_read_only(driver, "Province", "PAMPANGA", 2)
-fill_out_form_read_only(driver, "Municipality", "MABALACAT CITY", 2)
-fill_out_form_read_only(driver, "Barangay", "DAU", 2)
+fill_out_form(driver, "Unit/Building/House No./Purok/Street/Subdivision", "569-A Purok 1, Barangay San Jose", 1)
+fill_out_form_read_only(driver, "Country", "PHILIPPINES", 1)
+fill_out_form_read_only(driver, "Region", "REGION III (CENTRAL LUZON)", 1)
+fill_out_form_read_only(driver, "Province", "PAMPANGA", 1)
+fill_out_form_read_only(driver, "Municipality", "MABALACAT CITY", 1)
+fill_out_form_read_only(driver, "Barangay", "DAU", 1)
 
 driver.execute_script("window.scrollTo(0, 0);")
 address_label = driver.find_element(By.XPATH, "//span[@class='v-stepper__step__step' and contains(text(), '4')]")
@@ -258,12 +258,14 @@ time.sleep(1)
 # time.sleep(1)
 # label_element.send_keys('Jane Doe')
 
-label_element = driver.find_element(By.XPATH, f"//label[text()='Contact Person's Name']")
-for_attribute_value = label_element.get_attribute("for")
-input_element = driver.find_element(By.ID, for_attribute_value)
+# label_element = driver.find_element(By.XPATH, f"//label[1]")
+# for_attribute_value = label_element.get_attribute("for")
+# input_element = driver.find_element(By.ID, for_attribute_value)
 
-input_element.click()
-time.sleep(1)
+input_element = driver.find_element(By.XPATH, "//input[@type='text']")
+
+
+# input_element.click()
 input_element.send_keys("Jane Doe")
 
 # fill_out_form(driver, "Contact Person\'s Name", "Jane Doe")
