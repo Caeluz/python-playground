@@ -1,66 +1,54 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
+# All Imports pip
+# pip install selenium
+# pip install webdriver-manager
+# pip install python-dotenv
+
+from dotenv import load_dotenv
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
+import os
 
-hosts = ["https://api.osafphmabalacatcity.com/login", "http://localhost:8080/login"]
+# Custom Imports
+from utils.login_utils import login
+from utils.form_utils import fill_out_form, fill_out_form_read_only, fill_out_form_date
+import utils.driver_utils as driver
 
-driver = webdriver.Chrome()
-driver.get(hosts[1])
+
+# driver
+driver = driver.driver()
 
 def wait_for_element(driver, by, value):
     return WebDriverWait(driver, 10).until(EC.presence_of_element_located((by, value)))
-
-def fill_out_form(driver, label_text, input_value, is_read_only=False, time_sleep=0.25):
-    label_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
-    for_attribute_value = label_element.get_attribute("for")
-    input_element = driver.find_element(By.ID, for_attribute_value)
-
-    input_element.click()
-    if not is_read_only:
-        input_element.send_keys(input_value)
-    time.sleep(time_sleep)
-    
-def fill_out_form_read_only(driver, label_text, option_text):
-    fill_out_form(driver, label_text, option_text, is_read_only=True)
-    time.sleep(1)
-    dropdown_option = driver.find_element(By.XPATH, f"//div[text()='{option_text}']")
-    dropdown_option.click()
-
-def login():
     
 
-    fill_out_form(driver, "Username", users[0])
-    fill_out_form(driver, "Password", users[0])
-
-
-    # Click the "Login" button
-    login_button = driver.find_element(By.CLASS_NAME, "v-btn__content")
-    wait_for_element(driver, By.CLASS_NAME, "v-btn__content").click()
-
-
+def navigate_to_registrants():
+    timeout = 10
     # After logging in, click the "Register" button
     # After logging in, navigate to the Registrants page
-    time.sleep(1)
-    navdrawer = driver.find_element(By.CLASS_NAME, "v-btn__content")
+    # Wait for the navigation drawer button to be clickable
+    navdrawer = WebDriverWait(driver, timeout).until(
+        EC.element_to_be_clickable((By.CLASS_NAME, "v-btn__content"))
+    )
     navdrawer.click()
-    time.sleep(1)
-    citizens_div = driver.find_element(By.XPATH, "//div[text()='Citizens']")
+
+    # Wait for the "Citizens" element to be clickable and then click it
+    citizens_div = WebDriverWait(driver, timeout).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[text()='Citizens']"))
+    )
     citizens_div.click()
-    time.sleep(1)
-    registrants_div = driver.find_element(By.XPATH, "//div[text()='Registrants']")
+
+    # Wait for the "Registrants" element to be clickable and then click it
+    registrants_div = WebDriverWait(driver, timeout).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[text()='Registrants']"))
+    )
     registrants_div.click()
 
 
-    
-# Login
-# driver.find_element("id", "input-18").send_keys("admin")
-# driver.find_element("id", "input-21").send_keys("admin")
 
-def register():
+def register_citizen():
     register_button = driver.find_element(By.XPATH, "//span[text()='Register']")
     register_button.click()
 
@@ -69,7 +57,6 @@ def register():
     fill_out_form_read_only(driver, "Identification Card", "GOVERNMENT_ISSUED_ID")
     fill_out_form_read_only(driver, "Type of Id", "SSS")
     fill_out_form(driver, "Id Number", "1234567890")
-    fill_out_form(driver, "HUB Registrant Number", "1234567890")
 
     # Click the "Proceed" button
     # proceed_button = driver.find_element(By.XPATH, "//span[text()='Proceed']").click()
@@ -80,35 +67,14 @@ def register():
     fill_out_form(driver, "Last Name", "Doe")
     fill_out_form(driver, "First Name", "John")
     fill_out_form(driver, "Middle Name", "Herbert")
-
-    label_text = "Birthday"
-    # Find the input element associated with the label
-    birthday_input = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
-    for_attribute_value = birthday_input.get_attribute("for")
-    birthday_input_element = driver.find_element(By.ID, for_attribute_value).click()
-
-    # Wait for the calendar to appear
-    calendar = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, "//div[text()='13']"))
-    )
-
-    # Choose the date
-    time.sleep(0.25)
-    calendar_year = driver.find_element(By.XPATH, "//div[text()='2024']").click()
-    time.sleep(0.25)
-    calendar_year_2 = driver.find_element(By.XPATH, "//li[text()='2013']").click()
-    time.sleep(0.25)
-    calendar_month = driver.find_element(By.XPATH, "//div[text()='Jan']").click()
-    time.sleep(0.25)
-    calendar_day = driver.find_element(By.XPATH, "//div[text()='13']").click()
-    time.sleep(0.25)
+    
+    # Year Today, Year of Birth, Month of Birth, Day of Birth
+    fill_out_form_date(driver, "Birthday", "2024-2013-Jan-13")
 
     fill_out_form_read_only(driver, "Sex", "MALE")
     fill_out_form_read_only(driver, "Civil Status", "SINGLE")
     fill_out_form(driver, "Place of Birth", "Mabalacat City")
     fill_out_form(driver, "Contact Number", "09876543210")
-
-    # Example usage for different form fields
     fill_out_form(driver, "Blood Type", "O+")
     fill_out_form(driver, "Religion", "Buddhist")
     fill_out_form(driver, "Nationality", "American")
@@ -135,7 +101,7 @@ def register():
 
 
     # Emergency Contact
-    input_element = driver.find_element(By.XPATH, "(//input[@type='text'])[25]")
+    input_element = driver.find_element(By.XPATH, "(//input[@type='text'])[24]")
     input_element.click()
     input_element.send_keys("Jane Doe")
 
@@ -158,8 +124,18 @@ def register():
     # alert = driver.find_element(By.XPATH, "//div[text()='Register and verification failed. Please try again']")
     alert = driver.find_element(By.CLASS_NAME, "v-alert__content")
 
-login()
-register()
+
+# Load environment variables
+load_dotenv()
+username = os.getenv("ADMIN_USERNAME")
+password = os.getenv("ADMIN_PASSWORD")
+
+
+
+# Login
+login(driver, username, password)
+navigate_to_registrants()
+register_citizen()
 
 try:
     # Explicitly wait for the alert element to be present
@@ -173,9 +149,9 @@ try:
     # Check if the desired text is present in the alert
     if "Register and verification failed. Please try again." in alert_text:
         # print("Register and verification failed. Please try again.")
-        register()
+        register_citizen()
     else:
-        register()
+        register_citizen()
 
 except TimeoutException:
     # Handle timeout exception (element not found within the specified time)
