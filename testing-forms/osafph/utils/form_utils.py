@@ -36,14 +36,10 @@ def fill_out_form_date(driver, label_text, date):
     for_attribute_value = input_element.get_attribute("for")
     driver.find_element(By.ID, for_attribute_value).click()
     
-    print(date.split('-')[0], date.split('-')[1], date.split('-')[2], date.split('-')[3])
-
-    # print above with f format with labels
-    
-    
+    # print(date.split('-')[0], date.split('-')[1], date.split('-')[2], date.split('-')[3])
 
     # Wait for the calendar to appear
-    calendar = WebDriverWait(driver, 10).until(
+    WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, f"//div[text()='{date.split('-')[3]}']"))
     )
 

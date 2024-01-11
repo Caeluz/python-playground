@@ -131,34 +131,34 @@ username = os.getenv("ADMIN_USERNAME")
 password = os.getenv("ADMIN_PASSWORD")
 
 
-
 # Login
-login(driver, username, password)
-navigate_to_registrants()
-register_citizen()
+def main():
+    login(driver, username, password)
+    navigate_to_registrants()
+    register_citizen()
 
-try:
-    # Explicitly wait for the alert element to be present
-    alert = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "v-alert__content"))
-    )
+    try:
+        # Explicitly wait for the alert element to be present
+        alert = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "v-alert__content"))
+        )
 
-    # Get the text of the alert
-    alert_text = alert.text
+        # Get the text of the alert
+        alert_text = alert.text
 
-    # Check if the desired text is present in the alert
-    if "Register and verification failed. Please try again." in alert_text:
-        # print("Register and verification failed. Please try again.")
-        register_citizen()
-    else:
-        register_citizen()
+        # Check if the desired text is present in the alert
+        if "Register and verification failed. Please try again." in alert_text:
+            # print("Register and verification failed. Please try again.")
+            register_citizen()
+        else:
+            register_citizen()
 
-except TimeoutException:
-    # Handle timeout exception (element not found within the specified time)
-    print("Timeout: Alert element not found within the specified time")
+    except TimeoutException:
+        # Handle timeout exception (element not found within the specified time)
+        print("Timeout: Alert element not found within the specified time")
 
-time.sleep(200)
+    time.sleep(200)
 
-driver.quit()
+    driver.quit()
 
 # <div data-v-4d473584="" role="alert" class="v-alert v-sheet theme--dark error"><div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-alert theme--dark"></i><div class="v-alert__content">Register and verification failed. Please try again.</div><button type="button" class="v-alert__dismissible v-btn v-btn--icon v-btn--round theme--dark v-size--small" aria-label="Close"><span class="v-btn__content"><i aria-hidden="true" class="v-icon notranslate mdi mdi-close-circle theme--dark"></i></span></button></div></div>
