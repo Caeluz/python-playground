@@ -6,8 +6,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
 
+hosts = ["https://api.osafphmabalacatcity.com/login", "http://localhost:8080/login"]
+
 driver = webdriver.Chrome()
-driver.get("https://api.osafphmabalacatcity.com/login")
+driver.get(hosts[1])
 
 def wait_for_element(driver, by, value):
     return WebDriverWait(driver, 10).until(EC.presence_of_element_located((by, value)))
@@ -21,14 +23,15 @@ def fill_out_form(driver, label_text, input_value, is_read_only=False, time_slee
     if not is_read_only:
         input_element.send_keys(input_value)
     time.sleep(time_sleep)
-
+    
 def fill_out_form_read_only(driver, label_text, option_text):
     fill_out_form(driver, label_text, option_text, is_read_only=True)
+    time.sleep(1)
     dropdown_option = driver.find_element(By.XPATH, f"//div[text()='{option_text}']")
     dropdown_option.click()
 
 def login():
-
+    
 
     fill_out_form(driver, "Username", users[0])
     fill_out_form(driver, "Password", users[0])
@@ -62,7 +65,7 @@ def register():
     register_button.click()
 
     # Category
-    fill_out_form_read_only(driver, "Category", "ALL ADULT POPULATION ELIGIBLE TO BE CATEGORIZES AS PRIORITY GROUP A1")
+    fill_out_form_read_only(driver, "Category", "A1 - FRONTLINE HEALTH WORKERS")
     fill_out_form_read_only(driver, "Identification Card", "GOVERNMENT_ISSUED_ID")
     fill_out_form_read_only(driver, "Type of Id", "SSS")
     fill_out_form(driver, "Id Number", "1234567890")
@@ -91,7 +94,7 @@ def register():
 
     # Choose the date
     time.sleep(0.25)
-    calendar_year = driver.find_element(By.XPATH, "//div[text()='2023']").click()
+    calendar_year = driver.find_element(By.XPATH, "//div[text()='2024']").click()
     time.sleep(0.25)
     calendar_year_2 = driver.find_element(By.XPATH, "//li[text()='2013']").click()
     time.sleep(0.25)
