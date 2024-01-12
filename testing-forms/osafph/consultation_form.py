@@ -106,9 +106,9 @@ def create_consultation_form():
     
     # Remarks
     scroll_to_element_by_text(driver, "Remarks")
-    fill_out_form_date(driver, "Follow Up On", "2024-2025-Jan-13")
+    fill_out_form_date(driver, "Follow Up On", "2024-2025-Jan-13", position=3)
     time.sleep(1)
-    fill_out_form_date(driver, "Fit To Work Starting", "2024-2025-Jan-13", position=1)
+    fill_out_form_date(driver, "Fit To Work Starting", "2024-2025-Jan-13", position=4)
     fill_out_form(driver, "May Rest For", "3 days")
     
     

@@ -30,11 +30,16 @@ def fill_out_form_read_only(driver, label_text, option_text):
     dropdown_option.click()
 
 
-def fill_out_form_date(driver, label_text, date, position=1):
+def fill_out_form_date(driver, label_text, date, position=2):
         # Find the input element associated with the label
     input_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
     for_attribute_value = input_element.get_attribute("for")
     driver.find_element(By.ID, for_attribute_value).click()
+    
+    # //*[@id="app"]/div[2]/div/div[2]/div/div[2]/table/tbody/tr[2]/td[6]/button/div
+    # //*[@id="app"]/div[3]/div/div[2]/div/div[2]/table/tbody/tr[3]/td[3]/button/div
+    
+
     
     
     year_now, chosen_year, month, day = date.split('-')
@@ -42,12 +47,14 @@ def fill_out_form_date(driver, label_text, date, position=1):
     # Choose the date
     wait = WebDriverWait(driver, 10)
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{year_now}'][{position}]"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//li[text()='{chosen_year}'][{position}]"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{month}'][{position}]"))).click()
-    # wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{day}'][{position}]"))).click()
-    element = driver.find_element(By.XPATH, f"//div[text()='{day}']").click()
-    print("Element is displayed:", element)
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{year_now}']"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//li[text()='{chosen_year}']"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{month}']"))).click()
+    
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//html/body/div/div[{position}]/div/div[2]/div/div[2]/table/tbody/tr[2]/td[6]/button/div"))).click()
+    # wait.until(EC.element_to_be_clickable((By.XPATH, f"//html/body/div/div[{position}]/div[text()='{day}']"))).click()
+    # xpath = "//div[3]/div/div[text()='{}']".format(day)
+    # print(xpath)
 
 
 def fill_out_form_checkbox(driver, label_text):
