@@ -30,24 +30,53 @@ def fill_out_form_read_only(driver, label_text, option_text):
     dropdown_option.click()
 
 
-def fill_out_form_date(driver, label_text, date):
+def fill_out_form_date(driver, label_text, date, position=1):
         # Find the input element associated with the label
     input_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
     for_attribute_value = input_element.get_attribute("for")
     driver.find_element(By.ID, for_attribute_value).click()
     
-    # print(date.split('-')[0], date.split('-')[1], date.split('-')[2], date.split('-')[3])
-
-    # Wait for the calendar to appear
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.XPATH, f"//div[text()='{date.split('-')[3]}']"))
-    )
-
+    
+    year_now, chosen_year, month, day = date.split('-')
 
     # Choose the date
     wait = WebDriverWait(driver, 10)
 
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{date.split('-')[0]}']"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//li[text()='{date.split('-')[1]}']"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{date.split('-')[2]}']"))).click()
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{date.split('-')[3]}']"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{year_now}'][{position}]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//li[text()='{chosen_year}'][{position}]"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{month}'][{position}]"))).click()
+    # wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{day}'][{position}]"))).click()
+    element = driver.find_element(By.XPATH, f"//div[text()='{day}']").click()
+    print("Element is displayed:", element)
+
+
+def fill_out_form_checkbox(driver, label_text):
+    # Find the input element associated with the label
+    input_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}']")
+    for_attribute_value = input_element.get_attribute("for")
+    print(for_attribute_value)
+    
+    # Find the checkbox by ID and click on it
+    # checkbox = WebDriverWait(driver, 10).until(
+    #     EC.element_to_be_clickable((By.ID, for_attribute_value))
+    # )
+    
+    checkbox = driver.find_element(By.ID, for_attribute_value)
+    
+    # Click on the next sibling div element
+    div_element = checkbox.find_element(By.XPATH, 'following-sibling::div')
+    div_element.click()
+    
+def fill_out_form_checkbox_same(driver, label_text):
+    # Find the input element associated with the label
+    input_element = driver.find_element(By.XPATH, f"//label[text()='{label_text}'][-1]")
+    for_attribute_value = input_element.get_attribute("for")
+    print(for_attribute_value)
+    
+
+    
+    checkbox = driver.find_element(By.ID, for_attribute_value)
+    
+    # Click on the next sibling div element
+    div_element = checkbox.find_element(By.XPATH, 'following-sibling::div')
+    div_element.click()

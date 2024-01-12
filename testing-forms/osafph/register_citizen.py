@@ -161,4 +161,7 @@ def main():
 
     driver.quit()
 
+if __name__ == "__main__":
+    main()
+
 # <div data-v-4d473584="" role="alert" class="v-alert v-sheet theme--dark error"><div class="v-alert__wrapper"><i aria-hidden="true" class="v-icon notranslate v-alert__icon mdi mdi-alert theme--dark"></i><div class="v-alert__content">Register and verification failed. Please try again.</div><button type="button" class="v-alert__dismissible v-btn v-btn--icon v-btn--round theme--dark v-size--small" aria-label="Close"><span class="v-btn__content"><i aria-hidden="true" class="v-icon notranslate mdi mdi-close-circle theme--dark"></i></span></button></div></div>
