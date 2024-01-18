@@ -50,8 +50,9 @@ def fill_out_form_date(driver, label_text, date, position=2):
     wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{year_now}']"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, f"//li[text()='{chosen_year}']"))).click()
     wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{month}']"))).click()
+    wait.until(EC.element_to_be_clickable((By.XPATH, f"//div[text()='{day}']"))).click()
     
-    wait.until(EC.element_to_be_clickable((By.XPATH, f"//html/body/div/div[{position}]/div/div[2]/div/div[2]/table/tbody/tr[2]/td[6]/button/div"))).click()
+    # wait.until(EC.element_to_be_clickable((By.XPATH, f"//html/body/div/div[{position}]/div/div[2]/div/div[2]/table/tbody/tr[2]/td[6]/button/div"))).click()
     # wait.until(EC.element_to_be_clickable((By.XPATH, f"//html/body/div/div[{position}]/div[text()='{day}']"))).click()
     # xpath = "//div[3]/div/div[text()='{}']".format(day)
     # print(xpath)
