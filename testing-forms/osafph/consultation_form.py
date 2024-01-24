@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from faker import Faker
 import time
 import os
 
@@ -16,6 +17,11 @@ import utils.driver_utils as driver
 
 # Import Test Functions
 from tests.test_find_clickable_buttons import find_clickable_buttons
+
+# Initialize Faker
+fake = Faker()
+
+
 
 # driver
 driver = driver.driver()
