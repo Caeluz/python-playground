@@ -1,2 +1,5 @@
 /CodeVita
 .env
+
+*.json
+!prydwen_data.json

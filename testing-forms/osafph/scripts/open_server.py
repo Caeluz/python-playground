@@ -7,11 +7,13 @@ load_dotenv()
 # Get the user's home directory
 home_path = os.path.expanduser("~")
 
+temporary_path = "D:\\aaron"
+
 # Combine home path with the desired directory for Laravel project
-laravel_project_directory = os.path.join(home_path, 'Documents', 'GitHub', 'osafph-mcg-cares')
+laravel_project_directory = os.path.join(temporary_path, 'Documents', 'GitHub', 'osafph-mcg-cares')
 
 # Combine home path with the desired directory for npm project
-npm_project_directory = os.path.join(home_path, 'Documents', 'GitHub', 'osafph-frontend')
+npm_project_directory = os.path.join(temporary_path, 'Documents', 'GitHub', 'osafph-frontend')
 
 # Get the user's choice for running Laravel, Vue, or both
 user_choice = input("Enter 'l' to run Laravel, 'v' to run Vue, 'b' to run both: ")
@@ -22,7 +24,7 @@ if user_choice == 'l' or user_choice == 'b':
     os.chdir(laravel_project_directory)
 
     # Get the server IP from the environment variables
-    server_ip = os.getenv("SERVER_IP", "localhost")  # Default to localhost if not specified
+    server_ip = os.getenv("SERVER_IP", "127.0.0.1")  # Default to localhost if not specified
 
     # Command to run 'php artisan serve' with the server IP from the environment variables
     php_command = f'php artisan serve --host {server_ip} --port 80'
