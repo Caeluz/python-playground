@@ -1,7 +1,7 @@
 import os
 import pandas as pd
+import re
 
-# https://docs.google.com/spreadsheets/d/1SQK2xihURxiA2PTp0lAiRYXlphnm-EFa3CoKaUO7UOc/edit#gid=0
 def file_to_json(file_name):
     file_path = os.path.join(os.path.dirname(__file__), file_name)
 
@@ -14,6 +14,41 @@ def file_to_json(file_name):
         df = pd.read_csv(file_path)
     else:
         raise ValueError("Unsupported file format. Please provide an Excel (.xlsx, .xls) or CSV (.csv) file.")
+
+    # Remove percentage signs from 'Body', 'Feet', 'Planar Sphere', and 'Link Rope' columns
+    df['Body'] = df['Body'].str.replace('%', '')
+    df['Feet'] = df['Feet'].str.replace('%', '')
+    df['Feet'] = df['Feet'].str.replace('Speed', 'SPD')
+    
+    df['Planar Sphere'] = df['Planar Sphere'].str.replace('%', '')
+    df['Planar Sphere'] = df['Planar Sphere'].str.replace('DMG', 'DMG Boost')
+    df['Link Rope'] = df['Link Rope'].str.replace('%', '')
+    df['Link Rope'] = df['Link Rope'].str.replace('Energy Regen Rate', 'Energy Regeneration Rate')  
+    
+    # Add "Head":"HP" and "Hands":"ATK" to all builds
+    df['Head'] = 'HP'
+    df['Hands'] = 'ATK'
+    
+    # Convert columns with commas into arrays and remove spaces
+    df['Relic Set'] = df['Relic Set'].apply(lambda x: [s.strip() for s in x.split(',')])
+    df['Body'] = df['Body'].apply(lambda x: [s.strip() for s in x.split(',')])
+    df['Feet'] = df['Feet'].apply(lambda x: [s.strip() for s in x.split(',')])
+    df['Planetary Set'] = df['Planetary Set'].apply(lambda x: [s.strip() for s in x.split(',')])
+    df['Planar Sphere'] = df['Planar Sphere'].apply(lambda x: [s.strip() for s in x.split(',')] if pd.notna(x) else None)
+    df['Link Rope'] = df['Link Rope'].apply(lambda x: [s.strip() for s in x.split(',')])
+
+
+    # Add 'Boost' after 'Physical DMG' in 'Planar Sphere' column
+
+    # Modify 'Substats' column
+    df['Substats'] = df['Substats'].str.replace('%', '_')  # Replace '%' with '_'
+    df['Substats'] = df['Substats'].str.replace('CRIT RATE', 'CRIT Rate_')
+    df['Substats'] = df['Substats'].str.replace('CRIT DMG', 'CRIT DMG_')
+    df['Substats'] = df['Substats'].apply(lambda x: re.sub(r'\([^)]*\)', '', x))  # Remove text within parentheses
+    df['Substats'] = df['Substats'].apply(lambda x: re.split(r' > | = | >= ', x))
+    
+    # Remove leading and trailing spaces from each substat
+    df['Substats'] = df['Substats'].apply(lambda x: [substat.strip() for substat in x])
 
     # Convert DataFrame to JSON
     json_data = df.to_json(orient='records')
