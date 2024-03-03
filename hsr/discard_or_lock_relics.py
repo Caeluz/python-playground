@@ -7,15 +7,17 @@ def compare_relics(prydwen_data, relics_data):
     relic_slot_order = {'Head': 1, 'Hands': 2, 'Body': 3, 'Feet': 4, 'Planar Sphere': 5, 'Link Rope': 6}
     results = []
     for relic in relics_data['relics']:
+        
+        # Skip if the relic is already used (Not Available)
+        
+        # Skip if the relic level is not 0
+        if relic['level'] != 0:
+            continue
+        
         matched = False
         
         # Compare relic with Prydwen builds
         for prydwen_relic in prydwen_data:
-            # Skip if the relic is already used (Not Available)
-            
-            # Skip if the relic level is not 0
-            if relic['level'] != 0:
-                continue
             
             if relic['set'] in prydwen_relic['Relic Set'] and relic['mainstat'] in prydwen_relic[relic['slot']]:
                 
@@ -56,6 +58,7 @@ def compare_relics(prydwen_data, relics_data):
             # If no match found, add to results with 'Cannot be used'
             results.append({
                 'Relic ID': relic['_id'],
+                'relic Level': relic['level'],
                 'Character': 'None',
                 'Rank': 'Cannot be used',
                 'Mainstat': relic['mainstat'],
