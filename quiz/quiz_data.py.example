@@ -1,0 +1,18 @@
+quiz_data = [
+    {
+        "section": "",
+        "questions": [
+            {
+                "question": "",
+                "options": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
+                "correct_answer": "",
+                "explanation": ""
+            },
+        ]
+    },
+]
